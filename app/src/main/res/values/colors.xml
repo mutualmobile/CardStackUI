@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="rose">#ED008A</color>
+    <color name="pastel_magenta">#EF9DC5</color>
+    <color name="dark_green">#244637</color>
+    <color name="dirty_green">#456015</color>
+    <color name="teal">#0B5A67</color>
+    <color name="dark_blue">#383281</color>
+
+</resources>
