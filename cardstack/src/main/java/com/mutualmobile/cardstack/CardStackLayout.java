@@ -3,9 +3,6 @@ package com.mutualmobile.cardstack;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.graphics.Canvas;
-import android.graphics.Path;
-import android.graphics.RectF;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
@@ -18,15 +15,11 @@ public class CardStackLayout extends FrameLayout {
     Logger log = new Logger(CardStackLayout.class.getSimpleName());
 
     private float mCardGapBottom;
-    private boolean mRoundedEdgeEnabled;
     private float mCardGap;
     private boolean mShowInitAnimation;
     private boolean mParallaxEnabled;
     private int mParallaxScale;
     private OnCardSelected mOnCardSelectedListener = null;
-
-    private Path mClipPath = new Path();
-    private RectF mClipRect = new RectF();
 
     private CardStackAdapter mAdapter = null;
 
@@ -66,7 +59,6 @@ public class CardStackLayout extends FrameLayout {
         mParallaxScale = a.getInteger(R.styleable.CardStackLayout_parallax_scale, getResources().getInteger(R.integer.parallax_sacle_default));
         mCardGap = a.getDimension(R.styleable.CardStackLayout_card_gap, getResources().getDimension(R.dimen.card_gap));
         mCardGapBottom = a.getDimension(R.styleable.CardStackLayout_card_gap_bottom, getResources().getDimension(R.dimen.card_gap_bottom));
-        mRoundedEdgeEnabled = a.getBoolean(R.styleable.CardStackLayout_roundedEdge, false);
         a.recycle();
 
     }
@@ -86,46 +78,22 @@ public class CardStackLayout extends FrameLayout {
             postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    doEnterAnimation();
+                    restoreCards();
                 }
             }, 500);
         }
     }
 
-    private void doEnterAnimation() {
+    public boolean isCardSelected() {
+        return mAdapter.isCardSelected();
+    }
+
+    public void restoreCards() {
         mAdapter.resetCards();
     }
 
-    public static interface OnCardSelected {
+    public interface OnCardSelected {
         void onCardSelected(View v, int position);
-    }
-
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-        if (mRoundedEdgeEnabled) {
-            // compute the mClipPath
-            mClipPath.reset();
-            mClipRect.set(0, 0, w, h);
-            float radius = getResources().getDimension(R.dimen.card_radius);
-            mClipPath.addRoundRect(mClipRect, radius, radius, Path.Direction.CW);
-            mClipPath.close();
-        }
-
-    }
-
-    @Override
-    protected void dispatchDraw(Canvas canvas) {
-        int save = -1;
-        if (mRoundedEdgeEnabled) {
-            save = canvas.save();
-            canvas.clipPath(mClipPath);
-        }
-        super.dispatchDraw(canvas);
-        if (mRoundedEdgeEnabled) {
-            canvas.restoreToCount(save);
-        }
     }
 
 }

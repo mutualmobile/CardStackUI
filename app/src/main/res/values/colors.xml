@@ -10,5 +10,12 @@
     <color name="dirty_green">#456015</color>
     <color name="teal">#0B5A67</color>
     <color name="dark_blue">#383281</color>
+    <color name="violet">#9400D3</color>
+    <color name="indigo">#4B0082</color>
+    <color name="blue">#0000FF</color>
+    <color name="green">#00FF00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="orange">#FF7F00</color>
+    <color name="red">#FF0000</color>
 
 </resources>

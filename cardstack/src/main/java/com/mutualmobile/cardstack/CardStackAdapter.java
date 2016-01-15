@@ -115,14 +115,13 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         animatorSet.playTogether(animations);
         animatorSet.setDuration(ANIM_DURATION);
         animatorSet.setInterpolator(new DecelerateInterpolator(DECELERATION_FACTOR));
-        if (r != null) {
-            animatorSet.addListener(new AnimatorListenerAdapter() {
-                @Override
-                public void onAnimationEnd(Animator animation) {
-                    r.run();
-                }
-            });
-        }
+        animatorSet.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                if (r != null) r.run();
+                setScreenTouchable(true);
+            }
+        });
         animatorSet.start();
     }
 
@@ -139,7 +138,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 log.d("ACTION_DOWN: firstY=" + mTouchFirstY + ", y=" + event.getY());
-                if (mTouchFirstY != -1 || mSelectedCardPosition != -1) {
+                if (mTouchFirstY != -1) {
                     log.e("firstY=" + mTouchFirstY + ", mSelectedCardPosition=" + mSelectedCardPosition);
                     return false;
                 }
@@ -148,16 +147,26 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 break;
             case MotionEvent.ACTION_MOVE:
                 log.d("ACTION_MOVE: firstY=" + mTouchFirstY + ", y=" + event.getY());
-                moveCards(positionOfCardToMove, y - mTouchFirstY);
+                if (mSelectedCardPosition == -1)
+                    moveCards(positionOfCardToMove, y - mTouchFirstY);
                 mTouchDistance += Math.abs(y - mTouchPrevY);
                 break;
             case MotionEvent.ACTION_UP:
-                log.d("ACTION_UP: firstY=" + mTouchFirstY + ", y=" + event.getY());
-                resetCards(null);
-                if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8) {
+                log.d("ACTION_UP: firstY=" + mTouchFirstY + ", y=" + event.getY() + ", mSelectedCardPosition=" + mSelectedCardPosition);
+                if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8 && mSelectedCardPosition == -1) {
+                    log.d("Click registered");
                     onClick(v);
+                } else {
+                    log.d("Resetting cards");
+                    resetCards(new Runnable() {
+                        @Override
+                        public void run() {
+                            mSelectedCardPosition = -1;
+                        }
+                    });
                 }
                 mTouchPrevY = mTouchFirstY = -1;
+                mTouchDistance = 0;
                 break;
         }
         return true;
@@ -188,6 +197,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             startAnimations(animations, new Runnable() {
                 @Override
                 public void run() {
+                    setScreenTouchable(true);
                     if (mParent.getOnCardSelectedListener() != null) {
                         mParent.getOnCardSelectedListener().onCardSelected(v, mSelectedCardPosition);
                     }
@@ -219,12 +229,10 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     }
 
     public void resetCards() {
-        resetCards(new Runnable() {
-            @Override
-            public void run() {
-                mSelectedCardPosition = -1;
-                setScreenTouchable(true);
-            }
-        });
+        resetCards(null);
+    }
+
+    public boolean isCardSelected() {
+        return mSelectedCardPosition != -1;
     }
 }

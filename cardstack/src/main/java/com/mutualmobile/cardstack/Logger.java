@@ -44,12 +44,14 @@ public class Logger implements Serializable {
 
     @SuppressWarnings("all")
     public void e(String message) {
+        Log.e(getLogDetails(), message);
         if ((LOG_LEVEL & LOG_LEVEL_ERROR) != 0)
             Log.e(getLogDetails(), message);
     }
 
     @SuppressWarnings("all")
     public void d(String message) {
+        Log.d(getLogDetails(), message);
         if ((LOG_LEVEL & LOG_LEVEL_DEBUG) != 0)
             Log.d(getLogDetails(), message);
     }
