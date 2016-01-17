@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="rose">#ED008A</color>
+    <color name="pastel_magenta">#EF9DC5</color>
+    <color name="dark_green">#244637</color>
+    <color name="dirty_green">#456015</color>
+    <color name="teal">#0B5A67</color>
+    <color name="dark_blue">#383281</color>
+    <color name="violet">#9400D3</color>
+    <color name="indigo">#4B0082</color>
+    <color name="blue">#0000FF</color>
+    <color name="green">#00FF00</color>
+    <color name="yellow">#FFFF00</color>
+    <color name="orange">#FF7F00</color>
+    <color name="red">#FF0000</color>
+
+    <color name="card1_bg">#f78507</color>
+    <color name="card2_bg">#244637</color>
+    <color name="card3_bg">#c056d9</color>
+    <color name="card4_bg">#967754</color>
+    <color name="card5_bg">#ef075c</color>
+    <color name="card6_bg">#22adf5</color>
+    <color name="card7_bg">#5cee36</color>
+
+</resources>
