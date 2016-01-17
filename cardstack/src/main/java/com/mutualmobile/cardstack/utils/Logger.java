@@ -1,4 +1,4 @@
-package com.mutualmobile.cardstack;
+package com.mutualmobile.cardstack.utils;
 
 import android.util.Log;
 

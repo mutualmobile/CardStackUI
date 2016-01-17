@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
+import com.mutualmobile.cardstack.utils.Logger;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,31 +25,39 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     public static final int ANIM_DURATION = 600;
     public static final int DECELERATION_FACTOR = 2;
 
-
+    // Settings for the adapter from layout
     private float mCardGapBottom;
     private float mCardGap;
     private int mParallaxScale;
     private boolean mParallaxEnabled;
-
+    private boolean mShowInitAnimation;
 
     private final int mScreenHeight;
-    private final int fullCardHeight;
-    private final int dp30;
-    View[] cardViews;
+    private int fullCardHeight;
 
+    View[] mCardViews;
+
+    private float dp8;
+    private final int dp30;
 
     private CardStackLayout mParent;
+
     private boolean mScreenTouchable = false;
     private float mTouchFirstY = -1;
     private float mTouchPrevY = -1;
     private float mTouchDistance = 0;
     private int mSelectedCardPosition = -1;
-    private boolean mShowInitAnimation;
-    private float dp8;
     private float scaleFactorForElasticEffect;
+    private int mParentPaddingTop = 0;
+    private int dp16;
 
+    public View getCardView(int position) {
+        if (mCardViews == null) return null;
 
-    public abstract View getView(int position, ViewGroup container);
+        return mCardViews[position];
+    }
+
+    public abstract View createView(int position, ViewGroup container);
 
     public abstract int getCount();
 
@@ -67,17 +77,16 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         dp30 = (int) resources.getDimension(R.dimen.dp30);
         scaleFactorForElasticEffect = (int) resources.getDimension(R.dimen.dp8);
         dp8 = (int) resources.getDimension(R.dimen.dp8);
-        int dp80 = (int) resources.getDimension(R.dimen.dp80);
+        dp16 = (int) resources.getDimension(R.dimen.dp16);
 
-        fullCardHeight = mScreenHeight - dp80;
-
-        cardViews = new View[getCount()];
+        mCardViews = new View[getCount()];
     }
 
     public void addView(final int position) {
-        View root = getView(position, mParent);
+        View root = createView(position, mParent);
         root.setOnTouchListener(this);
         root.setTag(R.id.cardstack_internal_position_tag, position);
+        root.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, fullCardHeight);
         root.setLayoutParams(lp);
@@ -85,10 +94,11 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             root.setY(getCardFinalY(position));
             setScreenTouchable(false);
         } else {
-            root.setY(getCardOriginalY(position));
+            root.setY(getCardOriginalY(position) - mParentPaddingTop);
+            setScreenTouchable(true);
         }
 
-        cardViews[position] = root;
+        mCardViews[position] = root;
 
         mParent.addView(root);
     }
@@ -98,19 +108,21 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     }
 
     private float getCardOriginalY(int position) {
-        return dp8 + mCardGap * position;
+        float cardOriginalY = mParentPaddingTop + mCardGap * position;
+        log.d("cardOriginalY=" + cardOriginalY);
+        return cardOriginalY;
     }
 
     public void resetCards(Runnable r) {
         List<Animator> animations = new ArrayList<>(getCount());
         for (int i = 0; i < getCount(); i++) {
-            final View child = cardViews[i];
+            final View child = mCardViews[i];
             animations.add(ObjectAnimator.ofFloat(child, View.Y, (int) child.getY(), getCardOriginalY(i)));
         }
-        startAnimations(animations, r);
+        startAnimations(animations, r, true);
     }
 
-    private void startAnimations(List<Animator> animations, final Runnable r) {
+    private void startAnimations(List<Animator> animations, final Runnable r, final boolean isReset) {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(animations);
         animatorSet.setDuration(ANIM_DURATION);
@@ -120,6 +132,8 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             public void onAnimationEnd(Animator animation) {
                 if (r != null) r.run();
                 setScreenTouchable(true);
+                if (isReset)
+                    mSelectedCardPosition = -1;
             }
         });
         animatorSet.start();
@@ -132,12 +146,12 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             return false;
         }
 
-        float y = event.getY();
+        float y = event.getRawY();
         int positionOfCardToMove = (int) v.getTag(R.id.cardstack_internal_position_tag);
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                log.d("ACTION_DOWN: firstY=" + mTouchFirstY + ", y=" + event.getY());
+                log.d("ACTION_DOWN: firstY=" + mTouchFirstY + ", y=" + y);
                 if (mTouchFirstY != -1) {
                     log.e("firstY=" + mTouchFirstY + ", mSelectedCardPosition=" + mSelectedCardPosition);
                     return false;
@@ -146,28 +160,24 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 mTouchDistance = 0;
                 break;
             case MotionEvent.ACTION_MOVE:
-                log.d("ACTION_MOVE: firstY=" + mTouchFirstY + ", y=" + event.getY());
+                log.d("ACTION_MOVE: firstY=" + mTouchFirstY + ", y=" + y);
                 if (mSelectedCardPosition == -1)
                     moveCards(positionOfCardToMove, y - mTouchFirstY);
                 mTouchDistance += Math.abs(y - mTouchPrevY);
                 break;
+            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                log.d("ACTION_UP: firstY=" + mTouchFirstY + ", y=" + event.getY() + ", mSelectedCardPosition=" + mSelectedCardPosition);
+                log.d("ACTION_UP: firstY=" + mTouchFirstY + ", y=" + y + ", mSelectedCardPosition=" + mSelectedCardPosition);
                 if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8 && mSelectedCardPosition == -1) {
                     log.d("Click registered");
                     onClick(v);
                 } else {
                     log.d("Resetting cards");
-                    resetCards(new Runnable() {
-                        @Override
-                        public void run() {
-                            mSelectedCardPosition = -1;
-                        }
-                    });
+                    resetCards();
                 }
                 mTouchPrevY = mTouchFirstY = -1;
                 mTouchDistance = 0;
-                break;
+                return false;
         }
         return true;
     }
@@ -187,7 +197,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
 
             List<Animator> animations = new ArrayList<>(getCount());
             for (int i = 0; i < getCount(); i++) {
-                View child = cardViews[i];
+                View child = mCardViews[i];
                 if (i != mSelectedCardPosition) {
                     animations.add(ObjectAnimator.ofFloat(child, View.Y, (int) child.getY(), getCardFinalY(i)));
                 } else {
@@ -202,7 +212,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                         mParent.getOnCardSelectedListener().onCardSelected(v, mSelectedCardPosition);
                     }
                 }
-            });
+            }, false);
 
         }
     }
@@ -210,22 +220,32 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     public void moveCards(int positionOfCardToMove, float diff) {
         if (diff < 0 || positionOfCardToMove < 0 || positionOfCardToMove >= getCount()) return;
         for (int i = positionOfCardToMove; i < getCount(); i++) {
-            final View child = cardViews[i];
+            final View child = mCardViews[i];
             float diffCard = diff / scaleFactorForElasticEffect;
-            if (mParallaxEnabled)
-                diffCard = diffCard * mParallaxScale * (getCount() + 1 - i);
-            else diffCard = diffCard * (getCount() * 2 + 1);
+            if (mParallaxEnabled) {
+                if (mParallaxScale > 0) {
+                    diffCard = diffCard * (mParallaxScale / 3) * (getCount() + 1 - i);
+                } else {
+                    int scale = mParallaxScale * -1;
+                    diffCard = diffCard * (i * (scale / 3) + 1);
+                }
+            } else diffCard = diffCard * (getCount() * 2 + 1);
             child.setY(getCardOriginalY(i) + diffCard);
         }
     }
 
-    public void setAdapterParams(CardStackLayout cardStackLayout, float cardGapBottom, float cardGap, int parallaxScale, boolean parallaxEnabled, boolean showInitAnimation) {
+    public void setAdapterParams(CardStackLayout cardStackLayout) {
         mParent = cardStackLayout;
-        mCardGapBottom = cardGapBottom;
-        mCardGap = cardGap;
-        mParallaxScale = parallaxScale;
-        mParallaxEnabled = parallaxEnabled;
-        mShowInitAnimation = showInitAnimation;
+        mCardGapBottom = cardStackLayout.getCardGapBottom();
+        mCardGap = cardStackLayout.getCardGap();
+        mParallaxScale = cardStackLayout.getParallaxScale();
+        mParallaxEnabled = cardStackLayout.isParallaxEnabled();
+        if (mParallaxEnabled && mParallaxScale == 0)
+            mParallaxEnabled = false;
+        mShowInitAnimation = cardStackLayout.isShowInitAnimation();
+        mParentPaddingTop = cardStackLayout.getPaddingTop();
+        log.e("getCount()=" + getCount() + ", mCardGapBottom=" + mCardGapBottom);
+        fullCardHeight = (int) (mScreenHeight - dp30 - dp16 - getCount() * mCardGapBottom);
     }
 
     public void resetCards() {

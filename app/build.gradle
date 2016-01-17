@@ -22,5 +22,6 @@ android {
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile 'com.android.support:cardview-v7:23.1.1'
+    compile 'com.tramsun.libs:prefcompat:0.7'
     compile project(':cardstack')
 }

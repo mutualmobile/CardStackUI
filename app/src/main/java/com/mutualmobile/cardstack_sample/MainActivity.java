@@ -4,28 +4,58 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mutualmobile.cardstack.CardStackLayout;
+import com.mutualmobile.cardstack.utils.Logger;
+import com.mutualmobile.cardstack.utils.Units;
+import com.mutualmobile.cardstack_sample.interfaces.OnRestartRequest;
 
 ;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnRestartRequest {
 
-    private CardStackLayout mCardStack;
+    private CardStackLayout mCardStackLayout;
+    private Logger log = new Logger(MainActivity.class.getSimpleName());
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mCardStack = (CardStackLayout) findViewById(R.id.cardStack);
-        mCardStack.setAdapter(new MyCardStackAdapter(this));
+        mCardStackLayout = (CardStackLayout) findViewById(R.id.cardStack);
+        setupAdapter();
+    }
+
+    private void setupAdapter() {
+
+        mCardStackLayout.setShowInitAnimation(Prefs.isShowInitAnimationEnabled());
+
+        mCardStackLayout.setParallaxEnabled(Prefs.isParallaxEnabled());
+        mCardStackLayout.setParallaxScale(Prefs.getParallaxScale(this));
+
+        mCardStackLayout.setCardGap(Units.dpToPx(this, Prefs.getCardGap(this)));
+        mCardStackLayout.setCardGapBottom(Units.dpToPx(this, Prefs.getCardGapBottom(this)));
+
+        mCardStackLayout.setAdapter(new MyCardStackAdapter(this));
     }
 
     @Override
     public void onBackPressed() {
-        if (mCardStack.isCardSelected()) {
-            mCardStack.restoreCards();
+        if (mCardStackLayout.isCardSelected()) {
+            mCardStackLayout.restoreCards();
         } else {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void requestRestart() {
+        log.e("REBOOTING");
+        mCardStackLayout.removeAdapter();
+
+        mCardStackLayout.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                setupAdapter();
+            }
+        }, 200);
     }
 }
