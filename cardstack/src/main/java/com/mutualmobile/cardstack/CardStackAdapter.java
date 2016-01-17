@@ -50,6 +50,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     private float scaleFactorForElasticEffect;
     private int mParentPaddingTop = 0;
     private int dp16;
+    private int mCardPaddingInternal = 0;
 
     public View getCardView(int position) {
         if (mCardViews == null) return null;
@@ -88,6 +89,8 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         root.setTag(R.id.cardstack_internal_position_tag, position);
         root.setLayerType(View.LAYER_TYPE_HARDWARE, null);
 
+        mCardPaddingInternal = root.getPaddingTop();
+
         FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, fullCardHeight);
         root.setLayoutParams(lp);
         if (mShowInitAnimation) {
@@ -104,7 +107,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     }
 
     public float getCardFinalY(int position) {
-        return mScreenHeight - dp30 - ((getCount() - position) * mCardGapBottom);
+        return mScreenHeight - dp30 - ((getCount() - position) * mCardGapBottom) - mCardPaddingInternal;
     }
 
     private float getCardOriginalY(int position) {
@@ -245,7 +248,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         mShowInitAnimation = cardStackLayout.isShowInitAnimation();
         mParentPaddingTop = cardStackLayout.getPaddingTop();
         log.e("getCount()=" + getCount() + ", mCardGapBottom=" + mCardGapBottom);
-        fullCardHeight = (int) (mScreenHeight - dp30 - dp16 - getCount() * mCardGapBottom);
+        fullCardHeight = (int) (mScreenHeight - dp30 - dp8 - getCount() * mCardGapBottom);
     }
 
     public void resetCards() {

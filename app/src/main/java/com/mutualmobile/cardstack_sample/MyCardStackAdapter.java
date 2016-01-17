@@ -24,13 +24,13 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
 
     private final LayoutInflater mInfalter;
     private static int[] bgColorIds = {
-            R.color.violet,
-            R.color.indigo,
-            R.color.blue,
-            R.color.green,
-            R.color.yellow,
-            R.color.orange,
-            R.color.red
+            R.color.card1_bg,
+            R.color.card2_bg,
+            R.color.card3_bg,
+            R.color.card4_bg,
+            R.color.card5_bg,
+            R.color.card6_bg,
+            R.color.card7_bg
     };
     private final Context mContext;
     private OnRestartRequest mCallback;
