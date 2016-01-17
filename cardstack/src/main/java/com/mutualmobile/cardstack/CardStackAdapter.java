@@ -13,14 +13,12 @@ import android.view.ViewGroup;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 
-import com.mutualmobile.cardstack.utils.Logger;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class CardStackAdapter implements View.OnTouchListener, View.OnClickListener {
 
-    Logger log = new Logger(CardStackAdapter.class.getSimpleName());
+    //Logger log = new Logger(CardStackAdapter.class.getSimpleName());
 
     public static final int ANIM_DURATION = 600;
     public static final int DECELERATION_FACTOR = 2;
@@ -112,7 +110,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
 
     private float getCardOriginalY(int position) {
         float cardOriginalY = mParentPaddingTop + mCardGap * position;
-        log.d("cardOriginalY=" + cardOriginalY);
+        //log.d("cardOriginalY=" + cardOriginalY);
         return cardOriginalY;
     }
 
@@ -145,7 +143,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         if (!isScreenTouchable()) {
-            log.e("onTouch: Invalid touch registered. Ignoring");
+            //log.e("onTouch: Invalid touch registered. Ignoring");
             return false;
         }
 
@@ -154,28 +152,28 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                log.d("ACTION_DOWN: firstY=" + mTouchFirstY + ", y=" + y);
+                //log.d("ACTION_DOWN: firstY=" + mTouchFirstY + ", y=" + y);
                 if (mTouchFirstY != -1) {
-                    log.e("firstY=" + mTouchFirstY + ", mSelectedCardPosition=" + mSelectedCardPosition);
+                    //log.e("firstY=" + mTouchFirstY + ", mSelectedCardPosition=" + mSelectedCardPosition);
                     return false;
                 }
                 mTouchPrevY = mTouchFirstY = y;
                 mTouchDistance = 0;
                 break;
             case MotionEvent.ACTION_MOVE:
-                log.d("ACTION_MOVE: firstY=" + mTouchFirstY + ", y=" + y);
+                //log.d("ACTION_MOVE: firstY=" + mTouchFirstY + ", y=" + y);
                 if (mSelectedCardPosition == -1)
                     moveCards(positionOfCardToMove, y - mTouchFirstY);
                 mTouchDistance += Math.abs(y - mTouchPrevY);
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                log.d("ACTION_UP: firstY=" + mTouchFirstY + ", y=" + y + ", mSelectedCardPosition=" + mSelectedCardPosition);
+                //log.d("ACTION_UP: firstY=" + mTouchFirstY + ", y=" + y + ", mSelectedCardPosition=" + mSelectedCardPosition);
                 if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8 && mSelectedCardPosition == -1) {
-                    log.d("Click registered");
+                    //log.d("Click registered");
                     onClick(v);
                 } else {
-                    log.d("Resetting cards");
+                    //log.d("Resetting cards");
                     resetCards();
                 }
                 mTouchPrevY = mTouchFirstY = -1;
@@ -187,16 +185,16 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
 
     @Override
     public void onClick(final View v) {
-        log.d("y=" + v.getY() + ", selected=" + mSelectedCardPosition + ", vtag=" + v.getTag(R.id.cardstack_internal_position_tag));
+        //log.d("y=" + v.getY() + ", selected=" + mSelectedCardPosition + ", vtag=" + v.getTag(R.id.cardstack_internal_position_tag));
 
         if (!isScreenTouchable()) {
-            log.e("Invalid touch registered. Ignoring");
+            //log.e("Invalid touch registered. Ignoring");
             return;
         }
         setScreenTouchable(false);
         if (mSelectedCardPosition == -1) {
             mSelectedCardPosition = (int) v.getTag(R.id.cardstack_internal_position_tag);
-            log.d("selected=" + mSelectedCardPosition);
+            //log.d("selected=" + mSelectedCardPosition);
 
             List<Animator> animations = new ArrayList<>(getCount());
             for (int i = 0; i < getCount(); i++) {
@@ -247,7 +245,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             mParallaxEnabled = false;
         mShowInitAnimation = cardStackLayout.isShowInitAnimation();
         mParentPaddingTop = cardStackLayout.getPaddingTop();
-        log.e("getCount()=" + getCount() + ", mCardGapBottom=" + mCardGapBottom);
+        //log.e("getCount()=" + getCount() + ", mCardGapBottom=" + mCardGapBottom);
         fullCardHeight = (int) (mScreenHeight - dp30 - dp8 - getCount() * mCardGapBottom);
     }
 

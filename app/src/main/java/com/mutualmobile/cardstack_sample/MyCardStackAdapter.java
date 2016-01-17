@@ -12,7 +12,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.mutualmobile.cardstack.CardStackAdapter;
-import com.mutualmobile.cardstack.utils.Logger;
+import com.mutualmobile.cardstack_sample.utils.Logger;
 import com.mutualmobile.cardstack_sample.interfaces.OnRestartRequest;
 import com.tramsun.libs.prefcompat.Pref;
 

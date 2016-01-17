@@ -1,4 +1,6 @@
-package com.mutualmobile.cardstack;
+package com.mutualmobile.cardstack_sample.utils;
+
+import com.mutualmobile.cardstack.BuildConfig;
 
 /**
  * Init by Tushar Acharya on 10/9/15.

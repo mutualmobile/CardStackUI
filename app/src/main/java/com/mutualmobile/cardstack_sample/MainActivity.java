@@ -4,11 +4,9 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.mutualmobile.cardstack.CardStackLayout;
-import com.mutualmobile.cardstack.utils.Logger;
+import com.mutualmobile.cardstack_sample.utils.Logger;
 import com.mutualmobile.cardstack.utils.Units;
 import com.mutualmobile.cardstack_sample.interfaces.OnRestartRequest;
-
-;
 
 public class MainActivity extends AppCompatActivity implements OnRestartRequest {
 
