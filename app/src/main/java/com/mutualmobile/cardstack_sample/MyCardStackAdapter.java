@@ -34,6 +34,7 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
     };
     private final Context mContext;
     private OnRestartRequest mCallback;
+    private Runnable updateSettingsView;
 
     @Override
     public View createView(int position, ViewGroup container) {
@@ -56,16 +57,18 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
         final EditText cardGap = (EditText) root.findViewById(R.id.card_gap);
         final EditText cardGapBottom = (EditText) root.findViewById(R.id.card_gap_bottom);
 
-        final Runnable updateSettingsView = new Runnable() {
+        updateSettingsView = new Runnable() {
             @Override
             public void run() {
                 showInitAnimation.setChecked(Prefs.isShowInitAnimationEnabled());
                 showInitAnimation.setOnCheckedChangeListener(MyCardStackAdapter.this);
 
-                parallaxEnabled.setChecked(Prefs.isParallaxEnabled());
+                boolean isParallaxEnabled = Prefs.isParallaxEnabled();
+                parallaxEnabled.setChecked(isParallaxEnabled);
                 parallaxEnabled.setOnCheckedChangeListener(MyCardStackAdapter.this);
 
                 parallaxScale.setText("" + Prefs.getParallaxScale(mContext));
+                parallaxScale.setEnabled(isParallaxEnabled);
 
                 cardGap.setText("" + Prefs.getCardGap(mContext));
 
@@ -151,6 +154,7 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
                 Pref.putBoolean(Prefs.SHOW_INIT_ANIMATION, isChecked);
                 break;
         }
+        updateSettingsView.run();
     }
 
 }
