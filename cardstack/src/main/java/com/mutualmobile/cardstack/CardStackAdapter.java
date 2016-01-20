@@ -109,8 +109,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     }
 
     private float getCardOriginalY(int position) {
-        float cardOriginalY = mParentPaddingTop + mCardGap * position;
-        return cardOriginalY;
+        return mParentPaddingTop + mCardGap * position;
     }
 
     public void resetCards(Runnable r) {
