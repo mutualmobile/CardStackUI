@@ -5,7 +5,7 @@ android {
     buildToolsVersion "23.0.2"
 
     defaultConfig {
-        applicationId "com.mutualmobile.cardstack_sample"
+        applicationId "com.mutualmobile.cardstack.sample"
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1

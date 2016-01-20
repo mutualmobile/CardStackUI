@@ -1,14 +1,17 @@
-package com.mutualmobile.cardstack_sample.utils;
+package com.mutualmobile.cardstack.sample.utils;
 
 import android.util.Log;
 
 import java.io.Serializable;
 
-import static com.mutualmobile.cardstack_sample.utils.Config.LOG_DETAILED;
-import static com.mutualmobile.cardstack_sample.utils.Config.LOG_LEVEL;
-import static com.mutualmobile.cardstack_sample.utils.Config.LOG_LEVEL_DEBUG;
-import static com.mutualmobile.cardstack_sample.utils.Config.LOG_LEVEL_ERROR;
+import static com.mutualmobile.cardstack.sample.utils.Config.LOG_DETAILED;
+import static com.mutualmobile.cardstack.sample.utils.Config.LOG_LEVEL;
+import static com.mutualmobile.cardstack.sample.utils.Config.LOG_LEVEL_DEBUG;
+import static com.mutualmobile.cardstack.sample.utils.Config.LOG_LEVEL_ERROR;
 
+/**
+ * Created by tushar on 1/16/16.
+ */
 public class Logger implements Serializable {
     String TAG;
 

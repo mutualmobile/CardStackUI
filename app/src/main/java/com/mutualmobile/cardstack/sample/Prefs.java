@@ -1,4 +1,4 @@
-package com.mutualmobile.cardstack_sample;
+package com.mutualmobile.cardstack.sample;
 
 import android.content.Context;
 
