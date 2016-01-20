@@ -35,7 +35,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     private final int mScreenHeight;
     private int fullCardHeight;
 
-    View[] mCardViews;
+    private View[] mCardViews;
 
     private float dp8;
     private final int dp30;
@@ -49,7 +49,6 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     private int mSelectedCardPosition = -1;
     private float scaleFactorForElasticEffect;
     private int mParentPaddingTop = 0;
-    private int dp16;
     private int mCardPaddingInternal = 0;
 
     public View getCardView(int position) {
@@ -78,7 +77,6 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         dp30 = (int) resources.getDimension(R.dimen.dp30);
         scaleFactorForElasticEffect = (int) resources.getDimension(R.dimen.dp8);
         dp8 = (int) resources.getDimension(R.dimen.dp8);
-        dp16 = (int) resources.getDimension(R.dimen.dp16);
 
         mCardViews = new View[getCount()];
     }
@@ -153,7 +151,6 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 if (mTouchFirstY != -1) {
-                    //log.e("firstY=" + mTouchFirstY + ", mSelectedCardPosition=" + mSelectedCardPosition);
                     return false;
                 }
                 mTouchPrevY = mTouchFirstY = y;
