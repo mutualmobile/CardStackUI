@@ -15,3 +15,47 @@ An iOS-Healthbook-like highly customizable stack of cards implementation for And
     <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/development/images/showcase/PrallaxDrag.gif?token=ABCt5t4-uywQ20Kw489R1_5AQ7GXdx07ks5Wsi2QwA%3D%3D"></td>
   </tr>
 </table>
+
+Complete Demo - https://www.youtube.com/watch?v=8VjEa_u3LkM
+
+Sample App    - https://play.google.com/store/apps/details?id=com.mutualmobile.cardstack.sample
+
+### Gradle
+```
+dependencies {
+    ...
+    compile 'com.mutualmobile:cardstackui:0.1'
+}
+```
+
+Usage
+-----
+```xml
+<com.mutualmobile.cardstack.CardStackLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_stack="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardStack"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    card_stack:card_gap="60dp"
+    card_stack:card_gap_bottom="5dp"
+    card_stack:parallax_enabled="true"
+    card_stack:parallax_scale="-6"
+    card_stack:showInitAnimation="true" />
+```
+
+License
+-------
+
+    Copyright 2015 - 2016 Mutual Mobile
+
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
+
+        http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
