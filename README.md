@@ -18,8 +18,6 @@ An iOS-Healthbook-like highly customizable stack of cards implementation for And
 
 Complete Demo - https://www.youtube.com/watch?v=8VjEa_u3LkM
 
-Sample App    - https://play.google.com/store/apps/details?id=com.mutualmobile.cardstack.sample
-
 ### Gradle
 ```
 dependencies {
