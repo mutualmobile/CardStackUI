@@ -22,7 +22,7 @@ Complete Demo - https://www.youtube.com/watch?v=8VjEa_u3LkM
 ```
 dependencies {
     ...
-    compile 'com.mutualmobile:cardstackui:0.1'
+    compile 'com.mutualmobile.android:cardstack:0.1'
 }
 ```
 
