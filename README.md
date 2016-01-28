@@ -17,6 +17,7 @@ An iOS Healthbook-like highly customisable stack of cards implementation for And
 </table>
 
 Complete Demo - https://www.youtube.com/watch?v=8VjEa_u3LkM
+
 Sample app APK - https://github.com/mutualmobile/CardStackUI/releases
 
 ### Gradle
