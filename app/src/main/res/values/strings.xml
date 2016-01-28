@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">CardStack Sample</string>
+    <string name="title_activity_main">CardStack Sample</string>
+    <string name="show_init_animation">Show Init Animation</string>
+    <string name="parallax_enabled">Parallax Enabled</string>
+    <string name="parallax_scale">Parallax Scale</string>
+    <string name="card_gap">Gap Between Cards (in dp)</string>
+    <string name="card_gap_bottom">Gap Between Cards when collapsed (in dp)</string>
+    <string name="settings">Settings</string>
+    <string name="restart_activity">Apply and Restart</string>
+    <string name="reset_defaults">Reset Defaults</string>
+    <string name="card_title">Card %1$d</string>
+</resources>
