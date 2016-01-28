@@ -1,5 +1,5 @@
 # CardStack
-An iOS-Healthbook-like highly customizable stack of cards implementation for Android.
+An iOS Healthbook-like highly customisable stack of cards implementation for Android.
 
 <table>
   <tr>
