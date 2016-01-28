@@ -16,9 +16,6 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tushar on 12/15/15.
- */
 public abstract class CardStackAdapter implements View.OnTouchListener, View.OnClickListener {
 
 

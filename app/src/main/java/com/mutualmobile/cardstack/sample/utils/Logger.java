@@ -9,9 +9,6 @@ import static com.mutualmobile.cardstack.sample.utils.Config.LOG_LEVEL;
 import static com.mutualmobile.cardstack.sample.utils.Config.LOG_LEVEL_DEBUG;
 import static com.mutualmobile.cardstack.sample.utils.Config.LOG_LEVEL_ERROR;
 
-/**
- * Created by tushar on 1/16/16.
- */
 public class Logger implements Serializable {
     String TAG;
 

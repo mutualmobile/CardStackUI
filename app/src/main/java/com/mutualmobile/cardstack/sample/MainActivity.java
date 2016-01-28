@@ -8,9 +8,6 @@ import com.mutualmobile.cardstack.sample.interfaces.OnRestartRequest;
 import com.mutualmobile.cardstack.sample.utils.Logger;
 import com.mutualmobile.cardstack.utils.Units;
 
-/**
- * Created by tushar on 1/16/16.
- */
 public class MainActivity extends AppCompatActivity implements OnRestartRequest {
 
     private CardStackLayout mCardStackLayout;

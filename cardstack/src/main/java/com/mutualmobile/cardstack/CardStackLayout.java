@@ -8,14 +8,9 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
-/**
- * Created by tushar on 12/15/15.
- */
 public class CardStackLayout extends FrameLayout {
     public static final boolean PARALLAX_ENABLED_DEFAULT = false;
     public static final boolean SHOW_INIT_ANIMATION_DEFAULT = true;
-
-//    Logger log = new Logger(CardStackLayout.class.getSimpleName());
 
     private float mCardGapBottom;
     private float mCardGap;

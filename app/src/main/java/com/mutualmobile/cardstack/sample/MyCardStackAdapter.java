@@ -17,9 +17,6 @@ import com.mutualmobile.cardstack.sample.interfaces.OnRestartRequest;
 import com.mutualmobile.cardstack.sample.utils.Logger;
 import com.tramsun.libs.prefcompat.Pref;
 
-/**
- * Created by tushar on 12/16/15.
- */
 public class MyCardStackAdapter extends CardStackAdapter implements CompoundButton.OnCheckedChangeListener {
     private Logger log = new Logger(MyCardStackAdapter.class.getSimpleName());
 

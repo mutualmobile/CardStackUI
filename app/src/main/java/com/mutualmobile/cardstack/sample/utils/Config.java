@@ -2,9 +2,6 @@ package com.mutualmobile.cardstack.sample.utils;
 
 import com.mutualmobile.cardstack.sample.BuildConfig;
 
-/**
- * Init by tushar on 10/9/15.
- */
 public class Config {
     public static final boolean IS_RELEASE = !BuildConfig.DEBUG;
 

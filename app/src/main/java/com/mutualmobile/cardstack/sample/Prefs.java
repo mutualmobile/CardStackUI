@@ -5,9 +5,6 @@ import android.content.Context;
 import com.mutualmobile.cardstack.CardStackLayout;
 import com.tramsun.libs.prefcompat.Pref;
 
-/**
- * Created by tushar on 1/16/16.
- */
 public class Prefs {
 
     public static final String SHOW_INIT_ANIMATION = "showInitAnimation";
