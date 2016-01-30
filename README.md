@@ -1,6 +1,8 @@
 # CardStack
 An iOS Healthbook-like highly customisable stack of cards implementation for Android.
 
+[![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI)
+
 <table>
   <tr>
     <td><h4>Init Animation</h4></td>
