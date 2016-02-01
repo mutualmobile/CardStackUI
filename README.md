@@ -1,5 +1,5 @@
 # CardStack
-An iOS Healthbook-like highly customisable stack of cards implementation for Android.
+An iOS Passbook-like highly customisable stack of cards implementation for Android.
 
 [![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI)
 
