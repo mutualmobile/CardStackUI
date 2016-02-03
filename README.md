@@ -1,9 +1,7 @@
 # CardStack
 An iOS Passbook-like highly customisable stack of cards implementation for Android.
 
-[![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI)
-
-[![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CardStackUI-green.svg?style=true)](https://android-arsenal.com/details/1/3096)
+[![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CardStackUI-green.svg?style=true)](https://android-arsenal.com/details/1/3096)
 
 <table>
   <tr>
