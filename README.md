@@ -1,5 +1,7 @@
 # CardStack
-An iOS-Healthbook-like highly customizable stack of cards implementation for Android.
+An iOS Passbook-like highly customisable stack of cards implementation for Android.
+
+[![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CardStackUI-green.svg?style=true)](https://android-arsenal.com/details/1/3096)
 
 <table>
   <tr>
@@ -18,13 +20,13 @@ An iOS-Healthbook-like highly customizable stack of cards implementation for And
 
 Complete Demo - https://www.youtube.com/watch?v=8VjEa_u3LkM
 
-Sample App    - https://play.google.com/store/apps/details?id=com.mutualmobile.cardstack.sample
+Sample app APK - https://github.com/mutualmobile/CardStackUI/releases
 
 ### Gradle
 ```
 dependencies {
     ...
-    compile 'com.mutualmobile:cardstackui:0.1'
+    compile 'com.mutualmobile.android:cardstack:0.1'
 }
 ```
 

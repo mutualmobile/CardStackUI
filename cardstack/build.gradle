@@ -74,6 +74,7 @@ artifacts {
     archives sourcesJar
 }
 
+/* Fails in CI, un-comment only to deploy new binaries to Bintray
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
@@ -95,3 +96,4 @@ bintray {
     }
 }
 apply plugin: 'maven'
+*/
