@@ -44,12 +44,18 @@ public class CardStackLayout extends FrameLayout {
 
     public CardStackLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        handleArgs(context, attrs, defStyleAttr, 0);
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public CardStackLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
+        handleArgs(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    private void handleArgs(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         resetDefaults();
+
         final TypedArray a = context.getTheme().obtainStyledAttributes(
                 attrs, R.styleable.CardStackLayout, defStyleAttr, defStyleRes);
         mParallaxEnabled = a.getBoolean(R.styleable.CardStackLayout_parallax_enabled, PARALLAX_ENABLED_DEFAULT);
@@ -57,8 +63,8 @@ public class CardStackLayout extends FrameLayout {
         mParallaxScale = a.getInteger(R.styleable.CardStackLayout_parallax_scale, getResources().getInteger(R.integer.parallax_scale_default));
         mCardGap = a.getDimension(R.styleable.CardStackLayout_card_gap, getResources().getDimension(R.dimen.card_gap));
         mCardGapBottom = a.getDimension(R.styleable.CardStackLayout_card_gap_bottom, getResources().getDimension(R.dimen.card_gap_bottom));
-        a.recycle();
 
+        a.recycle();
     }
 
     public CardStackAdapter getAdapter() {
