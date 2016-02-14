@@ -8,6 +8,19 @@ import android.util.AttributeSet;
 import android.view.View;
 import android.widget.FrameLayout;
 
+/**
+ * Displays a list of cards as a stack on the screen.
+ * <p/>
+ * <b>XML attributes</b>
+ * <p/>
+ * See {@link R.styleable#CardStackLayout CardStackLayout Attributes}
+ *
+ * {@link R.styleable#CardStackLayout_showInitAnimation}
+ * {@link R.styleable#CardStackLayout_card_gap}
+ * {@link R.styleable#CardStackLayout_card_gap_bottom}
+ * {@link R.styleable#CardStackLayout_parallax_enabled}
+ * {@link R.styleable#CardStackLayout_parallax_scale}
+ */
 public class CardStackLayout extends FrameLayout {
     public static final boolean PARALLAX_ENABLED_DEFAULT = false;
     public static final boolean SHOW_INIT_ANIMATION_DEFAULT = true;
@@ -26,11 +39,20 @@ public class CardStackLayout extends FrameLayout {
         resetDefaults();
     }
 
-    public OnCardSelected getOnCardSelectedListener() {
+    /**
+     * package restricted
+     */
+    OnCardSelected getOnCardSelectedListener() {
         return mOnCardSelectedListener;
     }
 
-    public void setOnCardSelected(OnCardSelected onCardSelectedListener) {
+    /**
+     * Listen on card selection events for {@link CardStackLayout}. Sends clicked view and it's
+     * corresponding position in the callback.
+     *
+     * @param onCardSelectedListener listener
+     */
+    public void setOnCardSelectedListener(OnCardSelected onCardSelectedListener) {
         this.mOnCardSelectedListener = onCardSelectedListener;
     }
 
@@ -67,10 +89,17 @@ public class CardStackLayout extends FrameLayout {
         a.recycle();
     }
 
+    /**
+     * @return adapter of type {@link CardStackAdapter} that is set for this view.
+     */
     public CardStackAdapter getAdapter() {
         return mAdapter;
     }
 
+    /**
+     * Set the adapter for this {@link CardStackLayout}
+     * @param adapter Should extend {@link CardStackAdapter}
+     */
     public void setAdapter(CardStackAdapter adapter) {
         this.mAdapter = adapter;
         mAdapter.setAdapterParams(this);
@@ -88,10 +117,17 @@ public class CardStackLayout extends FrameLayout {
         }
     }
 
+    /**
+     * @return currently set parallax scale value.
+     */
     public int getParallaxScale() {
         return mParallaxScale;
     }
 
+    /**
+     * Sets the value of parallax scale. Parallax scale is the factor which decides how much
+     * distance a card will scroll when the user drags it down.
+     */
     public void setParallaxScale(int mParallaxScale) {
         this.mParallaxScale = mParallaxScale;
     }
@@ -112,14 +148,23 @@ public class CardStackLayout extends FrameLayout {
         this.mShowInitAnimation = mShowInitAnimation;
     }
 
+    /**
+     * @return the gap (in pixels) between two consecutive cards
+     */
     public float getCardGap() {
         return mCardGap;
     }
 
+    /**
+     * Set the gap (in pixels) between two consecutive cards
+     */
     public void setCardGap(float mCardGap) {
         this.mCardGap = mCardGap;
     }
 
+    /**
+     * @return gap between the two consecutive cards when collapsed to the bottom of the screen
+     */
     public float getCardGapBottom() {
         return mCardGapBottom;
     }
@@ -128,10 +173,16 @@ public class CardStackLayout extends FrameLayout {
         this.mCardGapBottom = mCardGapBottom;
     }
 
+    /**
+     * @return true if a card is selected, false otherwise
+     */
     public boolean isCardSelected() {
         return mAdapter.isCardSelected();
     }
 
+    /**
+     * Removes the adapter that was previously set using {@link #setAdapter(CardStackAdapter)}
+     */
     public void removeAdapter() {
         if (getChildCount() > 0)
             removeAllViews();
@@ -139,10 +190,16 @@ public class CardStackLayout extends FrameLayout {
         mOnCardSelectedListener = null;
     }
 
+    /**
+     * Animates the cards to their initial position in the layout.
+     */
     public void restoreCards() {
         mAdapter.resetCards();
     }
 
+    /**
+     * Intimates the implementing class about the selection of a card
+     */
     public interface OnCardSelected {
         void onCardSelected(View v, int position);
     }

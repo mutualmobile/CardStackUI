@@ -16,11 +16,24 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * This class acts as an adapter for the {@link CardStackLayout} view. This adapter is intentionally
+ * made an abstract class with following abstract methods -
+ * <p/>
+ * <p/>
+ * {@link #getCount()} - Decides the number of views present in the view
+ * <p/>
+ * {@link #createView(int, ViewGroup)} - Creates the view for all positions in range [0, {@link #getCount()})
+ * <p/>
+ * Contains the logic for touch events in {@link #onTouch(View, MotionEvent)}
+ */
 public abstract class CardStackAdapter implements View.OnTouchListener, View.OnClickListener {
 
 
     public static final int ANIM_DURATION = 600;
     public static final int DECELERATION_FACTOR = 2;
+
+    public static final int INVALID_CARD_POSITION = -1;
 
     // Settings for the adapter from layout
     private float mCardGapBottom;
@@ -43,25 +56,39 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     private float mTouchFirstY = -1;
     private float mTouchPrevY = -1;
     private float mTouchDistance = 0;
-    private int mSelectedCardPosition = -1;
+    private int mSelectedCardPosition = INVALID_CARD_POSITION;
     private float scaleFactorForElasticEffect;
     private int mParentPaddingTop = 0;
     private int mCardPaddingInternal = 0;
 
-    public View getCardView(int position) {
-        if (mCardViews == null) return null;
-
-        return mCardViews[position];
-    }
-
+    /**
+     * Defines and initializes the view to be shown in the {@link CardStackLayout}
+     * Provides two parameters to the sub-class namely -
+     *
+     * @param position
+     * @param container
+     *
+     * @return View corresponding to the position and parent container
+     */
     public abstract View createView(int position, ViewGroup container);
 
+    /**
+     * Defines the number of cards that are present in the {@link CardStackLayout}
+     *
+     * @return cardCount - Number of views in the related {@link CardStackLayout}
+     */
     public abstract int getCount();
 
-    public void setScreenTouchable(boolean screenTouchable) {
+    private void setScreenTouchable(boolean screenTouchable) {
         this.mScreenTouchable = screenTouchable;
     }
 
+    /**
+     * Returns true if no animation is in progress currently. Can be used to disable any events
+     * if they are not allowed during an animation. Returns false if an animation is in progress.
+     *
+     * @return - true if animation in progress, false otherwise
+     */
     public boolean isScreenTouchable() {
         return mScreenTouchable;
     }
@@ -78,7 +105,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         mCardViews = new View[getCount()];
     }
 
-    public void addView(final int position) {
+    void addView(final int position) {
         View root = createView(position, mParent);
         root.setOnTouchListener(this);
         root.setTag(R.id.cardstack_internal_position_tag, position);
@@ -101,7 +128,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         mParent.addView(root);
     }
 
-    public float getCardFinalY(int position) {
+    private float getCardFinalY(int position) {
         return mScreenHeight - dp30 - ((getCount() - position) * mCardGapBottom) - mCardPaddingInternal;
     }
 
@@ -109,6 +136,11 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         return mParentPaddingTop + mCardGap * position;
     }
 
+    /**
+     * Resets all cards in {@link CardStackLayout} to their initial positions
+     *
+     * @param r Execute r.run() once the reset animation is done
+     */
     public void resetCards(Runnable r) {
         List<Animator> animations = new ArrayList<>(getCount());
         for (int i = 0; i < getCount(); i++) {
@@ -118,6 +150,13 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         startAnimations(animations, r, true);
     }
 
+    /**
+     * Plays together all animations passed in as parameter. Once animation is completed, r.run() is
+     * executed. If parameter isReset is set to true, {@link #mSelectedCardPosition} is set to {@link #INVALID_CARD_POSITION}
+     * @param animations
+     * @param r
+     * @param isReset
+     */
     private void startAnimations(List<Animator> animations, final Runnable r, final boolean isReset) {
         AnimatorSet animatorSet = new AnimatorSet();
         animatorSet.playTogether(animations);
@@ -129,7 +168,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 if (r != null) r.run();
                 setScreenTouchable(true);
                 if (isReset)
-                    mSelectedCardPosition = -1;
+                    mSelectedCardPosition = INVALID_CARD_POSITION;
             }
         });
         animatorSet.start();
@@ -153,13 +192,13 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 mTouchDistance = 0;
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mSelectedCardPosition == -1)
+                if (mSelectedCardPosition == INVALID_CARD_POSITION)
                     moveCards(positionOfCardToMove, y - mTouchFirstY);
                 mTouchDistance += Math.abs(y - mTouchPrevY);
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8 && mSelectedCardPosition == -1) {
+                if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8 && mSelectedCardPosition == INVALID_CARD_POSITION) {
                     onClick(v);
                 } else {
                     resetCards();
@@ -178,7 +217,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             return;
         }
         setScreenTouchable(false);
-        if (mSelectedCardPosition == -1) {
+        if (mSelectedCardPosition == INVALID_CARD_POSITION) {
             mSelectedCardPosition = (int) v.getTag(R.id.cardstack_internal_position_tag);
 
             List<Animator> animations = new ArrayList<>(getCount());
@@ -203,7 +242,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         }
     }
 
-    public void moveCards(int positionOfCardToMove, float diff) {
+    private void moveCards(int positionOfCardToMove, float diff) {
         if (diff < 0 || positionOfCardToMove < 0 || positionOfCardToMove >= getCount()) return;
         for (int i = positionOfCardToMove; i < getCount(); i++) {
             final View child = mCardViews[i];
@@ -220,7 +259,12 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         }
     }
 
-    public void setAdapterParams(CardStackLayout cardStackLayout) {
+    /**
+     * Provides an API to {@link CardStackLayout} to set the parameters provided to it in its XML
+     *
+     * @param cardStackLayout Parent of all cards
+     */
+    void setAdapterParams(CardStackLayout cardStackLayout) {
         mParent = cardStackLayout;
         mCardGapBottom = cardStackLayout.getCardGapBottom();
         mCardGap = cardStackLayout.getCardGap();
@@ -233,11 +277,43 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         fullCardHeight = (int) (mScreenHeight - dp30 - dp8 - getCount() * mCardGapBottom);
     }
 
+    /**
+     * Resets all cards in {@link CardStackLayout} to their initial positions
+     */
     public void resetCards() {
         resetCards(null);
     }
 
+    /**
+     * Returns false if all the cards are in their initial position i.e. no card is selected
+     *
+     * Returns true if the {@link CardStackLayout} has a card selected and all other cards are
+     * at the bottom of the screen.
+     *
+     * @return true if any card is selected, false otherwise
+     */
     public boolean isCardSelected() {
-        return mSelectedCardPosition != -1;
+        return mSelectedCardPosition != INVALID_CARD_POSITION;
+    }
+
+    /**
+     * Returns the position of selected card. If no card
+     * is selected, returns {@link #INVALID_CARD_POSITION}
+     */
+    public int getSelectedCardPosition() {
+        return mSelectedCardPosition;
+    }
+
+    /**
+     * Since there is no view recycling in {@link CardStackLayout}, we maintain an instance of every
+     * view that is set for every position. This method returns a view at the requested position.
+     *
+     * @param position Position of card in {@link CardStackLayout}
+     * @return View at requested position
+     */
+    public View getCardView(int position) {
+        if (mCardViews == null) return null;
+
+        return mCardViews[position];
     }
 }
