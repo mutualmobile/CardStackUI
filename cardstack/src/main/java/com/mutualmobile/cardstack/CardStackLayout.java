@@ -15,11 +15,11 @@ import android.widget.FrameLayout;
  * <p/>
  * See {@link R.styleable#CardStackLayout CardStackLayout Attributes}
  *
- * @attr ref {@link R.styleable#CardStackLayout_showInitAnimation}
- * @attr ref {@link R.styleable#CardStackLayout_card_gap}
- * @attr ref {@link R.styleable#CardStackLayout_card_gap_bottom}
- * @attr ref {@link R.styleable#CardStackLayout_parallax_enabled}
- * @attr ref {@link R.styleable#CardStackLayout_parallax_scale}
+ * {@link R.styleable#CardStackLayout_showInitAnimation}
+ * {@link R.styleable#CardStackLayout_card_gap}
+ * {@link R.styleable#CardStackLayout_card_gap_bottom}
+ * {@link R.styleable#CardStackLayout_parallax_enabled}
+ * {@link R.styleable#CardStackLayout_parallax_scale}
  */
 public class CardStackLayout extends FrameLayout {
     public static final boolean PARALLAX_ENABLED_DEFAULT = false;
@@ -90,8 +90,7 @@ public class CardStackLayout extends FrameLayout {
     }
 
     /**
-     * Returns the adapter of type {@link CardStackAdapter} that is set for this view.
-     * @return
+     * @return adapter of type {@link CardStackAdapter} that is set for this view.
      */
     public CardStackAdapter getAdapter() {
         return mAdapter;
@@ -119,8 +118,7 @@ public class CardStackLayout extends FrameLayout {
     }
 
     /**
-     * Returns the currently set parallax scale value.
-     * @return
+     * @return currently set parallax scale value.
      */
     public int getParallaxScale() {
         return mParallaxScale;
@@ -129,7 +127,6 @@ public class CardStackLayout extends FrameLayout {
     /**
      * Sets the value of parallax scale. Parallax scale is the factor which decides how much
      * distance a card will scroll when the user drags it down.
-     * @return
      */
     public void setParallaxScale(int mParallaxScale) {
         this.mParallaxScale = mParallaxScale;
@@ -152,8 +149,7 @@ public class CardStackLayout extends FrameLayout {
     }
 
     /**
-     * Returns the gap (in pixels) between two consecutive cards
-     * @return
+     * @return the gap (in pixels) between two consecutive cards
      */
     public float getCardGap() {
         return mCardGap;
@@ -167,8 +163,7 @@ public class CardStackLayout extends FrameLayout {
     }
 
     /**
-     * Return the gap between the two consecutive cards when collapsed to the bottom of the screen
-     * @return
+     * @return gap between the two consecutive cards when collapsed to the bottom of the screen
      */
     public float getCardGapBottom() {
         return mCardGapBottom;
@@ -179,8 +174,7 @@ public class CardStackLayout extends FrameLayout {
     }
 
     /**
-     * Returs true if a card is selected, false otherwise
-     * @return
+     * @return true if a card is selected, false otherwise
      */
     public boolean isCardSelected() {
         return mAdapter.isCardSelected();
