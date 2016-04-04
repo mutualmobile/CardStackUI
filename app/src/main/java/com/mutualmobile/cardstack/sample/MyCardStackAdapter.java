@@ -18,32 +18,32 @@ import com.mutualmobile.cardstack.sample.utils.Logger;
 import com.tramsun.libs.prefcompat.Pref;
 
 public class MyCardStackAdapter extends CardStackAdapter implements CompoundButton.OnCheckedChangeListener {
-    private Logger log = new Logger(MyCardStackAdapter.class.getSimpleName());
-
+    private static int[] bgColorIds;
     private final LayoutInflater mInflater;
-    private static int[] bgColorIds = {
-            R.color.card1_bg,
-            R.color.card2_bg,
-            R.color.card3_bg,
-            R.color.card4_bg,
-            R.color.card5_bg,
-            R.color.card6_bg,
-            R.color.card7_bg
-    };
     private final Context mContext;
+    private Logger log = new Logger(MyCardStackAdapter.class.getSimpleName());
     private OnRestartRequest mCallback;
     private Runnable updateSettingsView;
-
-    @Override
-    public int getCount() {
-        return bgColorIds.length;
-    }
 
     public MyCardStackAdapter(MainActivity activity) {
         super(activity);
         mContext = activity;
         mInflater = LayoutInflater.from(activity);
         mCallback = activity;
+        bgColorIds = new int[]{
+                R.color.card1_bg,
+                R.color.card2_bg,
+                R.color.card3_bg,
+                R.color.card4_bg,
+                R.color.card5_bg,
+                R.color.card6_bg,
+                R.color.card7_bg,
+        };
+    }
+
+    @Override
+    public int getCount() {
+        return bgColorIds.length;
     }
 
     @Override
