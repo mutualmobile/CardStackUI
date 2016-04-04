@@ -34,22 +34,17 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     public static final int DECELERATION_FACTOR = 2;
 
     public static final int INVALID_CARD_POSITION = -1;
-
+    private final int mScreenHeight;
+    private final int dp30;
     // Settings for the adapter from layout
     private float mCardGapBottom;
     private float mCardGap;
     private int mParallaxScale;
     private boolean mParallaxEnabled;
     private boolean mShowInitAnimation;
-
-    private final int mScreenHeight;
     private int fullCardHeight;
-
     private View[] mCardViews;
-
     private float dp8;
-    private final int dp30;
-
     private CardStackLayout mParent;
 
     private boolean mScreenTouchable = false;
@@ -60,6 +55,16 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     private float scaleFactorForElasticEffect;
     private int mParentPaddingTop = 0;
     private int mCardPaddingInternal = 0;
+
+    public CardStackAdapter(Context context) {
+        Resources resources = context.getResources();
+
+        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
+        mScreenHeight = dm.heightPixels;
+        dp30 = (int) resources.getDimension(R.dimen.dp30);
+        scaleFactorForElasticEffect = (int) resources.getDimension(R.dimen.dp8);
+        dp8 = (int) resources.getDimension(R.dimen.dp8);
+    }
 
     /**
      * Defines and initializes the view to be shown in the {@link CardStackLayout}
@@ -79,10 +84,6 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
      */
     public abstract int getCount();
 
-    private void setScreenTouchable(boolean screenTouchable) {
-        this.mScreenTouchable = screenTouchable;
-    }
-
     /**
      * Returns true if no animation is in progress currently. Can be used to disable any events
      * if they are not allowed during an animation. Returns false if an animation is in progress.
@@ -93,16 +94,8 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         return mScreenTouchable;
     }
 
-    public CardStackAdapter(Context context) {
-        Resources resources = context.getResources();
-
-        DisplayMetrics dm = Resources.getSystem().getDisplayMetrics();
-        mScreenHeight = dm.heightPixels;
-        dp30 = (int) resources.getDimension(R.dimen.dp30);
-        scaleFactorForElasticEffect = (int) resources.getDimension(R.dimen.dp8);
-        dp8 = (int) resources.getDimension(R.dimen.dp8);
-
-        mCardViews = new View[getCount()];
+    private void setScreenTouchable(boolean screenTouchable) {
+        this.mScreenTouchable = screenTouchable;
     }
 
     void addView(final int position) {
@@ -266,6 +259,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
      */
     void setAdapterParams(CardStackLayout cardStackLayout) {
         mParent = cardStackLayout;
+        mCardViews = new View[getCount()];
         mCardGapBottom = cardStackLayout.getCardGapBottom();
         mCardGap = cardStackLayout.getCardGap();
         mParallaxScale = cardStackLayout.getParallaxScale();
