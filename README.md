@@ -26,7 +26,7 @@ Sample app APK - https://github.com/mutualmobile/CardStackUI/releases
 ```
 dependencies {
     ...
-    compile 'com.mutualmobile.android:cardstack:0.3'
+    compile 'com.mutualmobile.android:cardstack:0.4.4'
 }
 ```
 
