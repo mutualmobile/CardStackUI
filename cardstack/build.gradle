@@ -1,3 +1,8 @@
+// Manifest version information!
+def versionMajor = 0
+def versionMinor = 4
+def versionPatch = 5
+
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
@@ -5,11 +10,11 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://github.com/mutualmobile/CardStackUI'
 def gitUrl = 'https://github.com/mutualmobile/CardStackUI.git'
 group = "com.mutualmobile.android"
-def versionMajor = 0
-def versionMinor = 4
-def versionPatch = 5
-def vName = versionMajor + "." + versionMinor + "." + versionPatch
+def vName = versionMajor + '.' + versionMinor + '.' + versionPatch
 def vCode = versionMajor * 100 + versionMinor * 10 + versionPatch
+
+// This is for bintray, DON'T REMOVE
+version = vName
 
 android {
     compileSdkVersion 23
