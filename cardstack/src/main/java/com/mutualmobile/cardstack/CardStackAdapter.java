@@ -66,6 +66,10 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         dp8 = (int) resources.getDimension(R.dimen.dp8);
     }
 
+    protected float getCardGapBottom() {
+        return mCardGapBottom;
+    }
+
     /**
      * Defines and initializes the view to be shown in the {@link CardStackLayout}
      * Provides two parameters to the sub-class namely -
@@ -121,11 +125,11 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         mParent.addView(root);
     }
 
-    private float getCardFinalY(int position) {
+    protected float getCardFinalY(int position) {
         return mScreenHeight - dp30 - ((getCount() - position) * mCardGapBottom) - mCardPaddingInternal;
     }
 
-    private float getCardOriginalY(int position) {
+    protected float getCardOriginalY(int position) {
         return mParentPaddingTop + mCardGap * position;
     }
 
@@ -216,11 +220,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             List<Animator> animations = new ArrayList<>(getCount());
             for (int i = 0; i < getCount(); i++) {
                 View child = mCardViews[i];
-                if (i != mSelectedCardPosition) {
-                    animations.add(ObjectAnimator.ofFloat(child, View.Y, (int) child.getY(), getCardFinalY(i)));
-                } else {
-                    animations.add(ObjectAnimator.ofFloat(child, View.Y, (int) child.getY(), getCardOriginalY(0)));
-                }
+                animations.add(getAnimatorForView(child, i, mSelectedCardPosition));
             }
             startAnimations(animations, new Runnable() {
                 @Override
@@ -232,6 +232,23 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 }
             }, false);
 
+        }
+    }
+
+    /**
+     * This method can be overridden to have different animations for each card when a click event
+     * happens on any card view. This method will be called for every
+     *
+     * @param view                 The view for which this method needs to return an animator
+     * @param selectedCardPosition Position of the card that was clicked
+     * @param currentCardPosition  Position of the current card
+     * @return animator which has to be applied on the current card
+     */
+    protected Animator getAnimatorForView(View view, int currentCardPosition, int selectedCardPosition) {
+        if (currentCardPosition != selectedCardPosition) {
+            return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardFinalY(currentCardPosition));
+        } else {
+            return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardOriginalY(0) + (currentCardPosition * mCardGapBottom));
         }
     }
 

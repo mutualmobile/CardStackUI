@@ -1,5 +1,7 @@
 package com.mutualmobile.cardstack.sample;
 
+import android.animation.Animator;
+import android.animation.ObjectAnimator;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -53,6 +55,9 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
             case R.id.parallax_enabled:
                 Pref.putBoolean(Prefs.PARALLAX_ENABLED, isChecked);
                 break;
+            case R.id.reverse_click_animation:
+                Prefs.setReverseClickAnimationEnabled(isChecked);
+                break;
             case R.id.show_init_animation:
                 Pref.putBoolean(Prefs.SHOW_INIT_ANIMATION, isChecked);
                 break;
@@ -71,12 +76,26 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
         return root;
     }
 
+    @Override
+    protected Animator getAnimatorForView(View view, int currentCardPosition, int selectedCardPosition) {
+        if (Prefs.isReverseClickAnimationEnabled()) {
+            if (currentCardPosition > selectedCardPosition) {
+                return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardFinalY(currentCardPosition));
+            } else {
+                return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardOriginalY(0) + (currentCardPosition * getCardGapBottom()));
+            }
+        } else {
+            return super.getAnimatorForView(view, currentCardPosition, selectedCardPosition);
+        }
+    }
+
     private View getSettingsView(ViewGroup container) {
         CardView root = (CardView) mInflater.inflate(R.layout.settings_card, container, false);
         root.setCardBackgroundColor(ContextCompat.getColor(mContext, bgColorIds[0]));
 
         final Switch showInitAnimation = (Switch) root.findViewById(R.id.show_init_animation);
         final Switch parallaxEnabled = (Switch) root.findViewById(R.id.parallax_enabled);
+        final Switch reverseClickAnimation = (Switch) root.findViewById(R.id.reverse_click_animation);
         final EditText parallaxScale = (EditText) root.findViewById(R.id.parallax_scale);
         final EditText cardGap = (EditText) root.findViewById(R.id.card_gap);
         final EditText cardGapBottom = (EditText) root.findViewById(R.id.card_gap_bottom);
@@ -86,6 +105,9 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
             public void run() {
                 showInitAnimation.setChecked(Prefs.isShowInitAnimationEnabled());
                 showInitAnimation.setOnCheckedChangeListener(MyCardStackAdapter.this);
+
+                reverseClickAnimation.setChecked(Prefs.isReverseClickAnimationEnabled());
+                reverseClickAnimation.setOnCheckedChangeListener(MyCardStackAdapter.this);
 
                 boolean isParallaxEnabled = Prefs.isParallaxEnabled();
                 parallaxEnabled.setChecked(isParallaxEnabled);

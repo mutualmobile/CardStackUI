@@ -10,4 +10,5 @@
     <string name="restart_activity">Apply and Restart</string>
     <string name="reset_defaults">Reset Defaults</string>
     <string name="card_title">Card %1$d</string>
+    <string name="reverse_click_animation">Reverse Click Animation</string>
 </resources>

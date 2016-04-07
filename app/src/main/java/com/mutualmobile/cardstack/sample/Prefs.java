@@ -9,9 +9,11 @@ public class Prefs {
 
     public static final String SHOW_INIT_ANIMATION = "showInitAnimation";
     public static final String PARALLAX_ENABLED = "parallaxEnabled";
+    public static final String REVERSE_CLICK_ANIMATION_ENABLED = "reverseClickAnimationEnabled";
     public static final String PARALLAX_SCALE = "parallaxScale";
     public static final String CARD_GAP = "cardGap";
     public static final String CARD_GAP_BOTTOM = "cardGapBottom";
+    private static final Boolean REVERSE_CLICK_ANIMATION_ENABLED_DEFAULT = false;
 
     public static boolean isShowInitAnimationEnabled() {
         return Pref.getBoolean(SHOW_INIT_ANIMATION, CardStackLayout.SHOW_INIT_ANIMATION_DEFAULT);
@@ -41,8 +43,17 @@ public class Prefs {
 
         Pref.putBoolean(SHOW_INIT_ANIMATION, CardStackLayout.SHOW_INIT_ANIMATION_DEFAULT);
         Pref.putBoolean(PARALLAX_ENABLED, CardStackLayout.PARALLAX_ENABLED_DEFAULT);
+        setReverseClickAnimationEnabled(REVERSE_CLICK_ANIMATION_ENABLED_DEFAULT);
         Pref.putInt(PARALLAX_SCALE, context.getResources().getInteger(com.mutualmobile.cardstack.R.integer.parallax_scale_default));
         Pref.putInt(CARD_GAP, cardGapDimenInDp);
         Pref.putInt(CARD_GAP_BOTTOM, cardGapBottomDimenInDp);
+    }
+
+    public static boolean isReverseClickAnimationEnabled() {
+        return Pref.getBoolean(REVERSE_CLICK_ANIMATION_ENABLED, REVERSE_CLICK_ANIMATION_ENABLED_DEFAULT);
+    }
+
+    public static void setReverseClickAnimationEnabled(boolean b) {
+        Pref.putBoolean(REVERSE_CLICK_ANIMATION_ENABLED, b);
     }
 }

@@ -5,7 +5,11 @@ apply plugin: 'com.jfrog.bintray'
 def siteUrl = 'https://github.com/mutualmobile/CardStackUI'
 def gitUrl = 'https://github.com/mutualmobile/CardStackUI.git'
 group = "com.mutualmobile.android"
-version = "0.4.4"
+def versionMajor = 0
+def versionMinor = 4
+def versionPatch = 5
+def vName = versionMajor + "." + versionMinor + "." + versionPatch
+def vCode = versionMajor * 100 + versionMinor * 10 + versionPatch
 
 android {
     compileSdkVersion 23
@@ -14,8 +18,8 @@ android {
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
-        versionCode 8
-        versionName version
+        versionCode vCode
+        versionName vName
     }
     buildTypes {
         release {
