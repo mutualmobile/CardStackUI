@@ -75,7 +75,7 @@ artifacts {
 }
 
 // Fails in CI, un-comment only to deploy new binaries to Bintray
-
+/*
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
 
@@ -96,4 +96,4 @@ bintray {
         publicDownloadNumbers = true
     }
 }
-apply plugin: 'maven'
+apply plugin: 'maven'*/
