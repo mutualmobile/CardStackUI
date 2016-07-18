@@ -5,23 +5,26 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ScrollView;
 
 /**
  * Displays a list of cards as a stack on the screen.
- * <p/>
+ * <p>
  * <b>XML attributes</b>
- * <p/>
+ * <p>
  * See {@link R.styleable#CardStackLayout CardStackLayout Attributes}
- *
+ * <p>
  * {@link R.styleable#CardStackLayout_showInitAnimation}
  * {@link R.styleable#CardStackLayout_card_gap}
  * {@link R.styleable#CardStackLayout_card_gap_bottom}
  * {@link R.styleable#CardStackLayout_parallax_enabled}
  * {@link R.styleable#CardStackLayout_parallax_scale}
  */
-public class CardStackLayout extends FrameLayout {
+public class CardStackLayout extends ScrollView {
     public static final boolean PARALLAX_ENABLED_DEFAULT = false;
     public static final boolean SHOW_INIT_ANIMATION_DEFAULT = true;
 
@@ -32,11 +35,86 @@ public class CardStackLayout extends FrameLayout {
     private int mParallaxScale;
     private OnCardSelected mOnCardSelectedListener = null;
 
+    private boolean mScrollable = true;
+
     private CardStackAdapter mAdapter = null;
+    private FrameLayout mFrame;
 
     public CardStackLayout(Context context) {
         super(context);
+        init(context, null, 0, 0);
+    }
+
+    public CardStackLayout(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init(context, attrs, 0, 0);
+    }
+
+    public CardStackLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init(context, attrs, defStyleAttr, 0);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public CardStackLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
+        init(context, attrs, defStyleAttr, defStyleRes);
+    }
+
+    private void init(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         resetDefaults();
+
+        if (attrs != null) {
+            final TypedArray a = context.getTheme().obtainStyledAttributes(attrs, R.styleable.CardStackLayout, defStyleAttr, defStyleRes);
+            mParallaxEnabled = a.getBoolean(R.styleable.CardStackLayout_parallax_enabled, PARALLAX_ENABLED_DEFAULT);
+            mShowInitAnimation = a.getBoolean(R.styleable.CardStackLayout_showInitAnimation, SHOW_INIT_ANIMATION_DEFAULT);
+            mParallaxScale = a.getInteger(R.styleable.CardStackLayout_parallax_scale, getResources().getInteger(R.integer.parallax_scale_default));
+            mCardGap = a.getDimension(R.styleable.CardStackLayout_card_gap, getResources().getDimension(R.dimen.card_gap));
+            mCardGapBottom = a.getDimension(R.styleable.CardStackLayout_card_gap_bottom, getResources().getDimension(R.dimen.card_gap_bottom));
+            a.recycle();
+        } else {
+            mParallaxEnabled = PARALLAX_ENABLED_DEFAULT;
+            mShowInitAnimation = SHOW_INIT_ANIMATION_DEFAULT;
+            mParallaxScale = getResources().getInteger(R.integer.parallax_scale_default);
+            mCardGap = getResources().getDimension(R.dimen.card_gap);
+            mCardGapBottom = getResources().getDimension(R.dimen.card_gap_bottom);
+        }
+
+        setFillViewport(true);
+        setVerticalScrollBarEnabled(false);
+
+        mFrame = new CardFrameLayout(this);
+
+        addView(mFrame, new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+    }
+
+    public void setScrollingEnabled(boolean enabled) {
+        mScrollable = enabled;
+    }
+
+    public boolean isScrollable() {
+        return mScrollable;
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent ev) {
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                // if we can scroll pass the event to the superclass
+                if (mScrollable) return super.onTouchEvent(ev);
+
+                // only continue to handle the touch event if scrolling enabled
+                return false; // mScrollable is always false at this point
+            default:
+                return super.onTouchEvent(ev);
+        }
+    }
+
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        // Don't do anything with intercepted touch events if
+        // we are not scrollable
+        return mScrollable && super.onInterceptTouchEvent(ev);
     }
 
     /**
@@ -60,33 +138,8 @@ public class CardStackLayout extends FrameLayout {
         mOnCardSelectedListener = null;
     }
 
-    public CardStackLayout(Context context, AttributeSet attrs) {
-        this(context, attrs, 0);
-    }
-
-    public CardStackLayout(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-        handleArgs(context, attrs, defStyleAttr, 0);
-    }
-
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public CardStackLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
-        handleArgs(context, attrs, defStyleAttr, defStyleRes);
-    }
-
-    private void handleArgs(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        resetDefaults();
-
-        final TypedArray a = context.getTheme().obtainStyledAttributes(
-                attrs, R.styleable.CardStackLayout, defStyleAttr, defStyleRes);
-        mParallaxEnabled = a.getBoolean(R.styleable.CardStackLayout_parallax_enabled, PARALLAX_ENABLED_DEFAULT);
-        mShowInitAnimation = a.getBoolean(R.styleable.CardStackLayout_showInitAnimation, SHOW_INIT_ANIMATION_DEFAULT);
-        mParallaxScale = a.getInteger(R.styleable.CardStackLayout_parallax_scale, getResources().getInteger(R.integer.parallax_scale_default));
-        mCardGap = a.getDimension(R.styleable.CardStackLayout_card_gap, getResources().getDimension(R.dimen.card_gap));
-        mCardGapBottom = a.getDimension(R.styleable.CardStackLayout_card_gap_bottom, getResources().getDimension(R.dimen.card_gap_bottom));
-
-        a.recycle();
+    public FrameLayout getFrame() {
+        return mFrame;
     }
 
     /**
@@ -98,6 +151,7 @@ public class CardStackLayout extends FrameLayout {
 
     /**
      * Set the adapter for this {@link CardStackLayout}
+     *
      * @param adapter Should extend {@link CardStackAdapter}
      */
     public void setAdapter(CardStackAdapter adapter) {
@@ -184,8 +238,10 @@ public class CardStackLayout extends FrameLayout {
      * Removes the adapter that was previously set using {@link #setAdapter(CardStackAdapter)}
      */
     public void removeAdapter() {
-        if (getChildCount() > 0)
-            removeAllViews();
+        if (mFrame.getChildCount() > 0) {
+            mFrame.removeAllViews();
+        }
+
         mAdapter = null;
         mOnCardSelectedListener = null;
     }
@@ -193,8 +249,12 @@ public class CardStackLayout extends FrameLayout {
     /**
      * Animates the cards to their initial position in the layout.
      */
+    public void restoreCards(Runnable r) {
+        mAdapter.resetCards(r);
+    }
+
     public void restoreCards() {
-        mAdapter.resetCards();
+        restoreCards(null);
     }
 
     /**

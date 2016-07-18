@@ -2,6 +2,7 @@ package com.mutualmobile.cardstack.sample;
 
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.CardView;
@@ -33,6 +34,13 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
         mInflater = LayoutInflater.from(activity);
         mCallback = activity;
         bgColorIds = new int[]{
+                R.color.card1_bg,
+                R.color.card2_bg,
+                R.color.card3_bg,
+                R.color.card4_bg,
+                R.color.card5_bg,
+                R.color.card6_bg,
+                R.color.card7_bg,
                 R.color.card1_bg,
                 R.color.card2_bg,
                 R.color.card3_bg,
@@ -79,10 +87,13 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
     @Override
     protected Animator getAnimatorForView(View view, int currentCardPosition, int selectedCardPosition) {
         if (Prefs.isReverseClickAnimationEnabled()) {
+
+            int offsetTop = getScrollOffset();
+
             if (currentCardPosition > selectedCardPosition) {
-                return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardFinalY(currentCardPosition));
+                return ObjectAnimator.ofFloat(view, View.Y, view.getY(), offsetTop + getCardFinalY(currentCardPosition));
             } else {
-                return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardOriginalY(0) + (currentCardPosition * getCardGapBottom()));
+                return ObjectAnimator.ofFloat(view, View.Y, view.getY(), offsetTop + getCardOriginalY(0) + (currentCardPosition * getCardGapBottom()));
             }
         } else {
             return super.getAnimatorForView(view, currentCardPosition, selectedCardPosition);
@@ -101,6 +112,7 @@ public class MyCardStackAdapter extends CardStackAdapter implements CompoundButt
         final EditText cardGapBottom = (EditText) root.findViewById(R.id.card_gap_bottom);
 
         updateSettingsView = new Runnable() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void run() {
                 showInitAnimation.setChecked(Prefs.isShowInitAnimationEnabled());

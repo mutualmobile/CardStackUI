@@ -19,33 +19,37 @@ import java.util.List;
 /**
  * This class acts as an adapter for the {@link CardStackLayout} view. This adapter is intentionally
  * made an abstract class with following abstract methods -
- * <p/>
- * <p/>
+ * <p>
+ * <p>
  * {@link #getCount()} - Decides the number of views present in the view
- * <p/>
+ * <p>
  * {@link #createView(int, ViewGroup)} - Creates the view for all positions in range [0, {@link #getCount()})
- * <p/>
+ * <p>
  * Contains the logic for touch events in {@link #onTouch(View, MotionEvent)}
  */
 public abstract class CardStackAdapter implements View.OnTouchListener, View.OnClickListener {
 
-
+    // Animation constants
     public static final int ANIM_DURATION = 600;
     public static final int DECELERATION_FACTOR = 2;
 
     public static final int INVALID_CARD_POSITION = -1;
+
     private final int mScreenHeight;
     private final int dp30;
+    private float maxDistanceToConsiderAsClick;
+
     // Settings for the adapter from layout
     private float mCardGapBottom;
     private float mCardGap;
     private int mParallaxScale;
     private boolean mParallaxEnabled;
     private boolean mShowInitAnimation;
-    private int fullCardHeight;
+    private int mFullCardHeight;
+
+    private CardStackLayout mScrollParent;
+    private FrameLayout mFrame;
     private View[] mCardViews;
-    private float dp8;
-    private CardStackLayout mParent;
 
     private boolean mScreenTouchable = false;
     private float mTouchFirstY = -1;
@@ -63,7 +67,11 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         mScreenHeight = dm.heightPixels;
         dp30 = (int) resources.getDimension(R.dimen.dp30);
         scaleFactorForElasticEffect = (int) resources.getDimension(R.dimen.dp8);
-        dp8 = (int) resources.getDimension(R.dimen.dp8);
+        maxDistanceToConsiderAsClick = (int) resources.getDimension(R.dimen.dp8);
+    }
+
+    public int getFullCardHeight() {
+        return mFullCardHeight;
     }
 
     protected float getCardGapBottom() {
@@ -76,7 +84,6 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
      *
      * @param position
      * @param container
-     *
      * @return View corresponding to the position and parent container
      */
     public abstract View createView(int position, ViewGroup container);
@@ -103,14 +110,16 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     }
 
     void addView(final int position) {
-        View root = createView(position, mParent);
+        View root = createView(position, mFrame);
         root.setOnTouchListener(this);
         root.setTag(R.id.cardstack_internal_position_tag, position);
         root.setLayerType(View.LAYER_TYPE_HARDWARE, null);
+        root.setFocusable(true);
+        root.setFocusableInTouchMode(true);
 
         mCardPaddingInternal = root.getPaddingTop();
 
-        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, fullCardHeight);
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, mFullCardHeight);
         root.setLayoutParams(lp);
         if (mShowInitAnimation) {
             root.setY(getCardFinalY(position));
@@ -122,7 +131,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
 
         mCardViews[position] = root;
 
-        mParent.addView(root);
+        mFrame.addView(root);
     }
 
     protected float getCardFinalY(int position) {
@@ -150,6 +159,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
     /**
      * Plays together all animations passed in as parameter. Once animation is completed, r.run() is
      * executed. If parameter isReset is set to true, {@link #mSelectedCardPosition} is set to {@link #INVALID_CARD_POSITION}
+     *
      * @param animations
      * @param r
      * @param isReset
@@ -163,9 +173,13 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             @Override
             public void onAnimationEnd(Animator animation) {
                 if (r != null) r.run();
+
                 setScreenTouchable(true);
-                if (isReset)
+
+                if (isReset) {
                     mSelectedCardPosition = INVALID_CARD_POSITION;
+                    mScrollParent.setScrollingEnabled(true);
+                }
             }
         });
         animatorSet.start();
@@ -189,16 +203,19 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 mTouchDistance = 0;
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (mSelectedCardPosition == INVALID_CARD_POSITION)
-                    moveCards(positionOfCardToMove, y - mTouchFirstY);
+                // ToDo show animation when scrollview on top on on bottom
+                /*if (mSelectedCardPosition == INVALID_CARD_POSITION)
+                    moveCards(positionOfCardToMove, y - mTouchFirstY);*/
                 mTouchDistance += Math.abs(y - mTouchPrevY);
                 break;
-            case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
-                if (mTouchDistance < dp8 && Math.abs(y - mTouchFirstY) < dp8 && mSelectedCardPosition == INVALID_CARD_POSITION) {
-                    onClick(v);
-                } else {
-                    resetCards();
+            case MotionEvent.ACTION_CANCEL:
+                if (mTouchDistance < maxDistanceToConsiderAsClick && Math.abs(y - mTouchFirstY) < maxDistanceToConsiderAsClick) {
+                    if (mSelectedCardPosition == INVALID_CARD_POSITION) {
+                        onClick(v);
+                    } else {
+                        resetCards();
+                    }
                 }
                 mTouchPrevY = mTouchFirstY = -1;
                 mTouchDistance = 0;
@@ -214,6 +231,8 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
             return;
         }
         setScreenTouchable(false);
+
+        mScrollParent.setScrollingEnabled(false);
         if (mSelectedCardPosition == INVALID_CARD_POSITION) {
             mSelectedCardPosition = (int) v.getTag(R.id.cardstack_internal_position_tag);
 
@@ -226,8 +245,8 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
                 @Override
                 public void run() {
                     setScreenTouchable(true);
-                    if (mParent.getOnCardSelectedListener() != null) {
-                        mParent.getOnCardSelectedListener().onCardSelected(v, mSelectedCardPosition);
+                    if (mScrollParent.getOnCardSelectedListener() != null) {
+                        mScrollParent.getOnCardSelectedListener().onCardSelected(v, mSelectedCardPosition);
                     }
                 }
             }, false);
@@ -245,11 +264,17 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
      * @return animator which has to be applied on the current card
      */
     protected Animator getAnimatorForView(View view, int currentCardPosition, int selectedCardPosition) {
+        int offsetTop = getScrollOffset();
+
         if (currentCardPosition != selectedCardPosition) {
-            return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardFinalY(currentCardPosition));
+            return ObjectAnimator.ofFloat(view, View.Y, view.getY(), offsetTop + getCardFinalY(currentCardPosition));
         } else {
-            return ObjectAnimator.ofFloat(view, View.Y, (int) view.getY(), getCardOriginalY(0) + (currentCardPosition * mCardGapBottom));
+            return ObjectAnimator.ofFloat(view, View.Y, view.getY(), offsetTop + getCardOriginalY(0));
         }
+    }
+
+    protected int getScrollOffset() {
+        return mScrollParent.getScrollY();
     }
 
     private void moveCards(int positionOfCardToMove, float diff) {
@@ -275,8 +300,11 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
      * @param cardStackLayout Parent of all cards
      */
     void setAdapterParams(CardStackLayout cardStackLayout) {
-        mParent = cardStackLayout;
+        mScrollParent = cardStackLayout;
+        mFrame = cardStackLayout.getFrame();
+
         mCardViews = new View[getCount()];
+
         mCardGapBottom = cardStackLayout.getCardGapBottom();
         mCardGap = cardStackLayout.getCardGap();
         mParallaxScale = cardStackLayout.getParallaxScale();
@@ -284,8 +312,9 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
         if (mParallaxEnabled && mParallaxScale == 0)
             mParallaxEnabled = false;
         mShowInitAnimation = cardStackLayout.isShowInitAnimation();
+
         mParentPaddingTop = cardStackLayout.getPaddingTop();
-        fullCardHeight = (int) (mScreenHeight - dp30 - dp8 - getCount() * mCardGapBottom);
+        mFullCardHeight = (int) (mScreenHeight - dp30 - getCount() * mCardGapBottom);
     }
 
     /**
@@ -297,7 +326,7 @@ public abstract class CardStackAdapter implements View.OnTouchListener, View.OnC
 
     /**
      * Returns false if all the cards are in their initial position i.e. no card is selected
-     *
+     * <p>
      * Returns true if the {@link CardStackLayout} has a card selected and all other cards are
      * at the bottom of the screen.
      *
