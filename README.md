@@ -26,7 +26,7 @@ Sample app APK - https://github.com/mutualmobile/CardStackUI/releases
 ```
 dependencies {
     ...
-    compile 'com.mutualmobile.android:cardstack:0.4.5'
+    compile 'com.mutualmobile.android:cardstack:0.5.0'
 }
 ```
 
@@ -44,6 +44,11 @@ Usage
     card_stack:parallax_scale="-6"
     card_stack:showInitAnimation="true" />
 ```
+
+Known Issues
+-------
+
+```parallax_enabled``` and ```parallax_scale``` are not working currently. Also the drag to move cards also is not working.
 
 License
 -------
