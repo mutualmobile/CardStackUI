@@ -17,92 +17,93 @@ def vCode = versionMajor * 100 + versionMinor * 10 + versionPatch
 version = vName
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+  compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
+  buildToolsVersion rootProject.ext.BUILD_TOOLS_VERSION
 
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 24
-        versionCode vCode
-        versionName vName
+  defaultConfig {
+    minSdkVersion rootProject.ext.MIN_SDK_VERSION
+    targetSdkVersion rootProject.ext.TARGET_SDK_VERSION
+    versionCode vCode
+    versionName vName
+  }
+  buildTypes {
+    release {
+      minifyEnabled false
+      proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+  }
 }
 
 install {
-    repositories.mavenInstaller {
-        // This generates POM.xml with proper parameters
-        pom {
-            project {
-                packaging 'aar'
-                name 'card-stack-ui'
-                url siteUrl
+  repositories.mavenInstaller {
+    // This generates POM.xml with proper parameters
+    pom {
+      project {
+        packaging 'aar'
+        name 'card-stack-ui'
+        url siteUrl
 
-                // Set your license
-                licenses {
-                    license {
-                        name 'The Apache Software License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-                developers {
-                    developer {
-                        id 'tushar-acharya'
-                        name 'Tushar Acharya'
-                        email 'tushar.acharya@mutualmobile.com'
-                    }
-                }
-                scm {
-                    connection gitUrl
-                    developerConnection gitUrl
-                    url siteUrl
-
-                }
-            }
+        // Set your license
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0'
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+          }
         }
+        developers {
+          developer {
+            id 'tushar-acharya'
+            name 'Tushar Acharya'
+            email 'tushar.acharya@mutualmobile.com'
+          }
+        }
+        scm {
+          connection gitUrl
+          developerConnection gitUrl
+          url siteUrl
+        }
+      }
     }
+  }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.0.0'
+  compile fileTree(dir: 'libs', include: ['*.jar'])
+  compile "com.android.support:appcompat-v7:${rootProject.ext.SUPPORT_LIB_VERSION}"
 }
 
 
 task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
+  from android.sourceSets.main.java.srcDirs
+  classifier = 'sources'
 }
 
 artifacts {
-    archives sourcesJar
+  archives sourcesJar
 }
 
 // Fails in CI, un-comment only to deploy new binaries to Bintray
-/*
+
 Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
+if (project.rootProject.file('local.properties').exists()) {
+  properties.load(project.rootProject.file('local.properties').newDataInputStream())
+}
 
 bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
+  user = properties.getProperty("bintray.user")
+  key = properties.getProperty("bintray.apikey")
 
-    configurations = ['archives']
-    pkg {
-        repo = "Android"
-        name = "card-stack-ui"
-        userOrg = "mutualmobile"
-        websiteUrl = siteUrl
-        vcsUrl = gitUrl
-        licenses = ["Apache-2.0"]
-        publish = true
-        labels = ['aar', 'android', 'ui']
-        publicDownloadNumbers = true
-    }
+  configurations = ['archives']
+  pkg {
+    repo = "Android"
+    name = "card-stack-ui"
+    userOrg = "mutualmobile"
+    websiteUrl = siteUrl
+    vcsUrl = gitUrl
+    licenses = ["Apache-2.0"]
+    publish = true
+    labels = ['aar', 'android', 'ui']
+    publicDownloadNumbers = true
+  }
 }
-apply plugin: 'maven'*/
+apply plugin: 'maven'
