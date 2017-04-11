@@ -1,7 +1,8 @@
 # CardStack
 An iOS Passbook-like highly customisable stack of cards implementation for Android.
 
-[![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI) [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CardStackUI-green.svg?style=true)](https://android-arsenal.com/details/1/3096)
+[![Build Status](https://travis-ci.org/mutualmobile/CardStackUI.svg?branch=master)](https://travis-ci.org/mutualmobile/CardStackUI) [![Version](https://api.bintray.com/packages/mutualmobile/Android/card-stack-ui/images/download.svg)](https://bintray.com/mutualmobile/Android/card-stack-ui)
+ [![Android Arsenal](https://img.shields.io/badge/Android%20Arsenal-CardStackUI-green.svg?style=true)](https://android-arsenal.com/details/1/3096)
 
 <table>
   <tr>
@@ -11,10 +12,10 @@ An iOS Passbook-like highly customisable stack of cards implementation for Andro
     <td><h4>Parallax Drag</h4></td>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/development/images/showcase/InitAnimation.gif?token=ABCt5p-LPvIgv6lQmwPhcs01L7i6s1RNks5WsjhMwA%3D%3D"></td>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/development/images/showcase/Card%20Click.gif?token=ABCt5vutFKLG17UfTjwuNP7Wch6_e0a5ks5Wsi1HwA%3D%3D"></td>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/development/images/showcase/BasicDrag.gif?token=ABCt5uiVA9iKifP5YX9ta6nI_t0KsxVMks5Wsi0GwA%3D%3D"></td>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/development/images/showcase/PrallaxDrag.gif?token=ABCt5t4-uywQ20Kw489R1_5AQ7GXdx07ks5Wsi2QwA%3D%3D"></td>
+    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/InitAnimation.gif?token=ABCt5p-LPvIgv6lQmwPhcs01L7i6s1RNks5WsjhMwA%3D%3D"></td>
+    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/Card%20Click.gif?token=ABCt5vutFKLG17UfTjwuNP7Wch6_e0a5ks5Wsi1HwA%3D%3D"></td>
+    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/BasicDrag.gif?token=ABCt5uiVA9iKifP5YX9ta6nI_t0KsxVMks5Wsi0GwA%3D%3D"></td>
+    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/PrallaxDrag.gif?token=ABCt5t4-uywQ20Kw489R1_5AQ7GXdx07ks5Wsi2QwA%3D%3D"></td>
   </tr>
 </table>
 
