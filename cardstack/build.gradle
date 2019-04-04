@@ -18,7 +18,6 @@ version = vName
 
 android {
   compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
-  buildToolsVersion rootProject.ext.BUILD_TOOLS_VERSION
 
   defaultConfig {
     minSdkVersion rootProject.ext.MIN_SDK_VERSION
