@@ -8,14 +8,10 @@ An iOS Passbook-like highly customisable stack of cards implementation for Andro
   <tr>
     <td><h4>Init Animation</h4></td>
     <td><h4>Card Click</h4></td>
-    <td><h4>Basic Drag</h4></td>
-    <td><h4>Parallax Drag</h4></td>
   </tr>
   <tr>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/InitAnimation.gif?token=ABCt5p-LPvIgv6lQmwPhcs01L7i6s1RNks5WsjhMwA%3D%3D"></td>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/Card%20Click.gif?token=ABCt5vutFKLG17UfTjwuNP7Wch6_e0a5ks5Wsi1HwA%3D%3D"></td>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/BasicDrag.gif?token=ABCt5uiVA9iKifP5YX9ta6nI_t0KsxVMks5Wsi0GwA%3D%3D"></td>
-    <td><img src="https://raw.githubusercontent.com/mutualmobile/CardStackUI/master/images/showcase/PrallaxDrag.gif?token=ABCt5t4-uywQ20Kw489R1_5AQ7GXdx07ks5Wsi2QwA%3D%3D"></td>
+    <td><img src="https://github.com/Vivek65/CardStackUI/blob/master/images/showcase/InitAnimation0.0.6.gif"></td>
+    <td><img src="https://github.com/Vivek65/CardStackUI/blob/master/images/showcase/CardClick0.0.6.gif"></td>
   </tr>
 </table>
 
@@ -27,7 +23,7 @@ Sample app APK - https://github.com/mutualmobile/CardStackUI/releases
 ```
 dependencies {
     ...
-    compile 'com.mutualmobile.android:cardstack:0.5.3'
+    compile 'com.mutualmobile.android:cardstack:0.6.0'
 }
 ```
 
@@ -54,7 +50,7 @@ Known Issues
 License
 -------
 
-    Copyright 2015 - 2016 Mutual Mobile
+    Copyright 2015 - 2019 Mutual Mobile
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
