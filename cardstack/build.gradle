@@ -1,9 +1,11 @@
 // Manifest version information!
 def versionMajor = 0
-def versionMinor = 5
-def versionPatch = 3
+def versionMinor = 6
+def versionPatch = 0
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
@@ -27,8 +29,13 @@ android {
   }
   buildTypes {
     release {
-      minifyEnabled false
+      minifyEnabled true
+      debuggable true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
+      debuggable true
+      minifyEnabled false
     }
   }
 }
@@ -69,8 +76,8 @@ install {
 dependencies {
   compile fileTree(dir: 'libs', include: ['*.jar'])
   compile "com.android.support:appcompat-v7:${rootProject.ext.SUPPORT_LIB_VERSION}"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
-
 
 task sourcesJar(type: Jar) {
   from android.sourceSets.main.java.srcDirs
@@ -106,3 +113,6 @@ bintray {
   }
 }
 apply plugin: 'maven'
+repositories {
+  mavenCentral()
+}

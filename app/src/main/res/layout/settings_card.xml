@@ -3,142 +3,142 @@
     xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    card_view:cardBackgroundColor="@color/card1_bg"
+    card_view:cardBackgroundColor="@color/colorPrimaryDark"
     card_view:cardCornerRadius="6dp"
-    card_view:cardElevation="6dp"
     card_view:cardUseCompatPadding="true">
+
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/card_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:padding="16dp"
+        android:text="@string/settings"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        style="@style/TextWhite"/>
+
+    <Switch
+        android:id="@+id/show_init_animation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/show_init_animation"
+        style="@style/TextWhite"/>
+
+    <Switch
+        android:id="@+id/parallax_enabled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/parallax_enabled"
+        style="@style/TextWhite"/>
+
+    <Switch
+        android:id="@+id/reverse_click_animation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/reverse_click_animation"
+        style="@style/TextWhite"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/card_title"
-            style="@style/ShadowBlackTextWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/settings"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:padding="16dp"
+          android:text="@string/parallax_scale"
+          style="@style/TextWhite"/>
 
-        <Switch
-            android:id="@+id/show_init_animation"
-            style="@style/ShadowBlackTextWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/show_init_animation" />
+      <EditText
+          android:id="@+id/parallax_scale"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
+          android:gravity="center_horizontal"
+          android:inputType="numberSigned"
+          android:minWidth="50dp"
+          style="@style/TextWhite"/>
 
-        <Switch
-            android:id="@+id/parallax_enabled"
-            style="@style/ShadowBlackTextWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/parallax_enabled" />
-
-        <Switch
-            android:id="@+id/reverse_click_animation"
-            style="@style/ShadowBlackTextWhite"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:text="@string/reverse_click_animation" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/ShadowBlackTextWhite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="16dp"
-                android:text="@string/parallax_scale" />
-
-            <EditText
-                android:id="@+id/parallax_scale"
-                style="@style/ShadowBlackTextWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:gravity="center_horizontal"
-                android:inputType="numberSigned"
-                android:minWidth="50dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/ShadowBlackTextWhite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="16dp"
-                android:text="@string/card_gap" />
-
-            <EditText
-                android:id="@+id/card_gap"
-                style="@style/ShadowBlackTextWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:gravity="center_horizontal"
-                android:inputType="number"
-                android:minWidth="50dp" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/ShadowBlackTextWhite"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="16dp"
-                android:text="@string/card_gap_bottom" />
-
-            <EditText
-                android:id="@+id/card_gap_bottom"
-                style="@style/ShadowBlackTextWhite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="16dp"
-                android:gravity="center_horizontal"
-                android:inputType="number"
-                android:minWidth="50dp" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/restart_activity"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/restart_activity" />
-
-        <Button
-            android:id="@+id/reset_defaults"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:text="@string/reset_defaults" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:padding="16dp"
+          android:text="@string/card_gap"
+          style="@style/TextWhite"/>
+
+      <EditText
+          android:id="@+id/card_gap"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
+          android:gravity="center_horizontal"
+          android:inputType="number"
+          android:minWidth="50dp"
+          style="@style/TextWhite"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+      <TextView
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:padding="16dp"
+          android:text="@string/card_gap_bottom"
+          style="@style/TextWhite"/>
+
+      <EditText
+          android:id="@+id/card_gap_bottom"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginRight="16dp"
+          android:gravity="center_horizontal"
+          android:inputType="number"
+          android:minWidth="50dp"
+          style="@style/TextWhite"/>
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/restart_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/restart_activity"/>
+
+    <Button
+        android:id="@+id/reset_defaults"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:text="@string/reset_defaults"/>
+  </LinearLayout>
 </android.support.v7.widget.CardView>

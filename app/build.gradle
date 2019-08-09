@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
   compileSdkVersion rootProject.ext.COMPILE_SDK_VERSION
@@ -14,8 +16,12 @@ android {
   }
   buildTypes {
     release {
-      minifyEnabled false
+      minifyEnabled true
       proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+    }
+    debug {
+      debuggable true
+      minifyEnabled false
     }
   }
 }
@@ -27,4 +33,9 @@ dependencies {
   implementation "com.android.support:appcompat-v7:${rootProject.ext.SUPPORT_LIB_VERSION}"
   implementation 'com.tramsun.libs:prefcompat:0.7'
   implementation 'com.mutualmobile.android:cardstack:0.5.3'
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+  implementation 'com.jakewharton.timber:timber:4.7.1'
+}
+repositories {
+  mavenCentral()
 }
